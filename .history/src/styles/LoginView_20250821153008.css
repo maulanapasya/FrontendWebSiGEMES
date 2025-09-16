@@ -1,0 +1,111 @@
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f9fc;
+  }
+  
+  .login-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+    border: 1px solid #d1e7ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 140px;
+    margin-bottom: 15px;
+    display: block;
+  }
+  
+  h2 {
+    color: #444;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    text-align: left;
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .form-group input {
+    width: 350px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    color: black !important;
+  }
+  
+  /* Tombol login */
+  .login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #87cefa;
+    color: white;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.login-button:hover {
+    background-color: #4682b4;
+}
+  
+/* Pesan error */
+.error-message {
+margin-top: 10px;
+color: red;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+  
+.password-wrapper input {
+    width: 100%;
+    padding: 10px 40px 10px 10px; /* Tambahkan padding kanan agar ikon tidak overlap */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+  
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+}
+  
+.toggle-password:hover {
+    color: #333;
+}
+
+.error-text {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
+  display: block;
+}
