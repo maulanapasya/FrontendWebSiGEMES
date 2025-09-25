@@ -184,541 +184,436 @@
 
        <!-- Add Guesthouse Modal -->
        <transition name="modal">
-            <div v-if="showAddGuesthouseModal" class="detail-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-                <div class="detail-modal-cardbox w-4/5 max-w-4xl rounded-2xl shadow-lg p-6 relative overflow-y-auto max-h-[90vh]">
-                    <!-- Close button -->
-                    <button @click="closeAddGuesthouseModal" class="absolute top-4 right-4 text-gray-700 hover:text-gray-900">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    
-                    <!-- Modal title -->
-                <h2 class="text-2xl text-black font-bold data-gedung-text mb-6 text-center">Tambah Gedung Mess</h2>
-                    
-                    <!-- Form steps indicator -->
-                    <div class="flex justify-center mb-6">
-                        <div class="w-1/2 flex items-center">
-                            <div :class="[
-                                'w-8 h-8 rounded-full flex items-center justify-center font-bold mr-2',
-                                formStep === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
-                            ]">1</div>
-                            <div class="flex-grow h-1" :class="formStep === 1 ? 'bg-blue-500' : 'bg-gray-300'"></div>
-                            <div :class="[
-                                'w-8 h-8 rounded-full flex items-center justify-center font-bold ml-2',
-                                formStep === 2 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
-                            ]">2</div>
-                        </div>
-                    </div>
-
-                    <!-- Add Guesthouse Form Photo Slideshow Modal -->
-                    <transition name="modal">
-                        <div v-if="showAddGuesthouseSlideshow" class="photo-slideshow fixed inset-0 flex items-center justify-center z-50">
-                            <!-- Overlay hitam sebagai background -->
-                            <div class="absolute inset-0 bg-black bg-opacity-75"></div>
-                            
-                            <!-- Container utama dengan tombol close di luar container foto -->
-                            <div class="relative w-full h-full max-w-5xl max-h-screen p-4 flex flex-col">
-                                <!-- Tombol Close -->
-                                <button 
-                                    @click="showAddGuesthouseSlideshow = false" 
-                                    class="absolute top-4 right-4 z-30 bg-black bg-opacity-50 text-white hover:text-gray-200 p-2 rounded-full"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                                
-                                <!-- Container untuk foto -->
-                                <div class="flex-1 flex items-center justify-center mt-8 mb-12 overflow-hidden">
-                                    <img 
-                                        :src="guesthousePhotoPreviews[currentAddGuesthouseSlideIndex]" 
-                                        alt="Preview foto gedung mess" 
-                                        class="max-w-full max-h-full object-contain"
-                                    >
-                                </div>
-                                
-                                <!-- Navigasi dan counter foto -->
-                                <div class="flex justify-between items-center w-full px-4">
-                                    <!-- Previous Button -->
-                                    <button 
-                                        @click="prevAddGuesthouseSlide" 
-                                        class="navigation-button bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full p-3 text-xl z-20"
-                                        :disabled="currentAddGuesthouseSlideIndex === 0"
-                                        :class="{'opacity-50 cursor-not-allowed': currentAddGuesthouseSlideIndex === 0}"
-                                    >
-                                        ◀
-                                    </button>
-                                    
-                                    <!-- Counter foto -->
-                                    <div class="bg-black bg-opacity-50 text-white px-4 py-2 rounded-full z-20">
-                                        {{ currentAddGuesthouseSlideIndex + 1 }} / {{ guesthousePhotoPreviews.length }}
-                                    </div>
-                                    
-                                    <!-- Next Button -->
-                                    <button 
-                                        @click="nextAddGuesthouseSlide" 
-                                        class="navigation-button bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full p-3 text-xl z-20"
-                                        :disabled="currentAddGuesthouseSlideIndex === (guesthousePhotoPreviews.length - 1)"
-                                        :class="{'opacity-50 cursor-not-allowed': currentAddGuesthouseSlideIndex === (guesthousePhotoPreviews.length - 1)}"
-                                    >
-                                        ▶
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </transition>    
-
-                    <!-- Edit Guesthouse Form Photoslide Modal -->
-                    <transition name="modal">
-                        <div v-if="showAddRoomSlideshow" class="photo-slideshow fixed inset-0 flex items-center justify-center z-50">
-                            <!-- Overlay hitam sebagai background -->
-                            <div class="absolute inset-0 bg-black bg-opacity-75"></div>
-                            
-                            <!-- Container utama dengan tombol close di luar container foto -->
-                            <div class="relative w-full h-full max-w-5xl max-h-screen p-4 flex flex-col">
-                                <!-- Tombol Close - di pojok kanan atas -->
-                                <button 
-                                    @click="showAddRoomSlideshow = false" 
-                                    class="absolute top-4 right-4 z-30 bg-black bg-opacity-50 text-white hover:text-gray-200 p-2 rounded-full"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                                
-                                <!-- Container untuk foto yang dibatasi ukurannya -->
-                                <div class="flex-1 flex items-center justify-center mt-8 mb-12 overflow-hidden">
-                                    <img 
-                                        :src="roomPhotoPreviews[currentAddRoomSlideIndex]" 
-                                        alt="Preview foto ruang mess" 
-                                        class="max-w-full max-h-full object-contain"
-                                    >
-                                </div>
-                                
-                                <!-- Navigasi dan counter foto -->
-                                <div class="flex justify-between items-center w-full px-4">
-                                    <!-- Previous Button -->
-                                    <button 
-                                        @click="prevAddRoomSlide" 
-                                        class="navigation-button bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full p-3 text-xl z-20"
-                                        :disabled="currentAddRoomSlideIndex === 0"
-                                        :class="{'opacity-50 cursor-not-allowed': currentAddRoomSlideIndex === 0}"
-                                    >
-                                        ◀
-                                    </button>
-                                    
-                                    <!-- Counter foto -->
-                                    <div class="bg-black bg-opacity-50 text-white px-4 py-2 rounded-full z-20">
-                                        {{ currentAddRoomSlideIndex + 1 }} / {{ roomPhotoPreviews.length }}
-                                    </div>
-                                    
-                                    <!-- Next Button -->
-                                    <button 
-                                        @click="nextAddRoomSlide" 
-                                        class="navigation-button bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full p-3 text-xl z-20"
-                                        :disabled="currentAddRoomSlideIndex === (roomPhotoPreviews.length - 1)"
-                                        :class="{'opacity-50 cursor-not-allowed': currentAddRoomSlideIndex === (roomPhotoPreviews.length - 1)}"
-                                    >
-                                        ▶
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </transition>
-                    
-                    <!-- Step 1: Guesthouse Form -->
-                    <form v-if="formStep === 1" @submit.prevent="submitGuesthouseForm" class="space-y-4">
-                        <!-- Photo upload section -->
-                        <div class="mb-6 text-center">
-                            <div class="relative w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
-                                <div v-if="guesthousePhotoPreviews.length === 0" class="text-center cursor-pointer" @click="triggerPhotoInput">
-                                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                    </div>
-                                    <div class="text-black font-bold data-gedung-text">Tambah Foto</div>
-                                </div>
-                                
-                                <!-- Photo previews -->
-                                <div v-else class="flex overflow-x-auto p-2 w-full h-full">
-                                    <div v-for="(preview, index) in guesthousePhotoPreviews" :key="index" class="relative flex-shrink-0 w-32 h-32 mr-2">
-                                        <img :src="preview" class="w-32 h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity" @click="openAddGuesthouseSlideshow(index)"/>
-                                        <button @click.stop="removeGuesthousePhoto(index)" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    
-                                    <!-- Add more photos button -->
-                                    <div class="flex-shrink-0 w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer" @click="triggerPhotoInput">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                
-                                <input 
-                                    type="file" 
-                                    ref="photoInput" 
-                                    multiple 
-                                    accept="image/*" 
-                                    class="hidden" 
-                                    @change="handleGuesthousePhotoChange"
-                                />
-                            </div>
-                        </div>
-                        
-                        <!-- Guesthouse Details -->
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Nama Gedung</label>
-                                <input 
-                                    v-model="newGuesthouse.name" 
-                                    type="text" 
-                                    class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Tentang Gedung</label>
-                                <textarea 
-                                    v-model="newGuesthouse.description" 
-                                    rows="4" 
-                                    class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                ></textarea>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Luas Bangunan (m²)</label>
-                                <input 
-                                    v-model="newGuesthouse.area_m2" 
-                                    type="number" 
-                                    class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Contact Person</label>
-                                <input 
-                                    v-model="newGuesthouse.contact_person" 
-                                    type="text" 
-                                    class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Fasilitas Utama</label>
-                                <div class="flex">
-                                    <input 
-                                        v-model="facilityInput" 
-                                        type="text" 
-                                        class="flex-grow px-3 py-2 border rounded-l-lg focus:outline-none focus:ring-2 text-black focus:ring-blue-500"
-                                        placeholder="Tambah Fasilitas Utama..."
-                                    />
-                                    <button 
-                                        type="button" 
-                                        @click="addFacility"
-                                        class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 font-semibold data-gedung-text"
-                                    >
-                                        + Tambah Fasilitas
-                                    </button>
-                                </div>
-                                <div class="mt-2 flex flex-wrap gap-2">
-                                    <button 
-                                        v-for="(quickFacility, index) in quickFacilities" 
-                                        :key="'quick-' + index" 
-                                        type="button" 
-                                        @click="addQuickFacility(quickFacility)"
-                                        class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded text-sm"
-                                    >
-                                        {{ quickFacility }}
-                                    </button>
-                                </div>
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                <span 
-                                    v-for="(facility, index) in newGuesthouse.facilitiesList" 
-                                    :key="index" 
-                                    class="bg-gray-300 text-black px-3 py-1 rounded-full text-sm flex items-center"
-                                >
-                                    {{ facility }}
-                                    <button @click="removeFacility(index)" class="ml-2 text-black hover:text-black">
-                                        ×
-                                    </button>
-                                </span>
-                                </div>
-                            </div>
-                            
-                            <!-- Koordinat Maps -->
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Lokasi</label>
-                                <div class="mb-2">
-                                    <div class="flex">
-                                        <input
-                                            v-model="searchQuery"
-                                            type="text"
-                                            placeholder="Ketikkan lokasi atau pilih dari peta"
-                                            class="w-full px-3 py-2 border text-black border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            @keyup.enter="searchLocation"
-                                        />
-                                        <button 
-                                            type="button" 
-                                            @click="searchLocation" 
-                                            class="px-4 py-2 bg-blue-500 data-gedung-text font-bold text-white rounded-r-lg hover:bg-blue-600"
-                                        >
-                                            Cari
-                                        </button>
-                                    </div>
-                                    <p v-if="searchError" class="text-red-500 text-sm mt-1">{{ searchError }}</p>
-                                </div>
-                                <div class="border border-gray-300 rounded-lg overflow-hidden h-48">
-                                    <div id="map" class="w-full h-full"></div>
-                                </div>
-                                <div class="flex space-x-4 mt-2 text-sm text-gray-500">
-                                    <p hidden>Latitude: {{ newGuesthouse.latitude }}</p>
-                                    <p hidden>Longitude: {{ newGuesthouse.longitude }}</p>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Alamat</label>
-                                <input 
-                                    v-model="newGuesthouse.address" 
-                                    type="text" 
-                                    class="w-full px-3 py-2 border rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                        </div>
-                        
-                        <!-- Form navigation buttons -->
-                        <div class="flex justify-between pt-4">
-                            <button 
-                                type="button" 
-                                @click="closeAddGuesthouseModal" 
-                                class="px-6 py-2 bg-gray-300 data-gedung-text font-bold text-gray-700 rounded-lg hover:bg-gray-400"
-                            >
-                                Batal
-                            </button>
-                            <button 
-                                type="submit" 
-                                class="px-6 py-2 bg-blue-500 data-gedung-text font-bold text-white rounded-lg hover:bg-blue-600 flex items-center"
-                                :disabled="isSubmittingGuesthouse"
-                            >
-                                <svg v-if="isSubmittingGuesthouse" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                {{ isSubmittingGuesthouse ? 'Menyimpan...' : 'Selanjutnya' }}
-                            </button>
-                        </div>
-                    </form>
-                    
-                    <!-- Step 2: Room Form -->
-                    <form v-if="formStep === 2" @submit.prevent="submitRoomForm" class="space-y-4">
-                        <!-- Photo upload section -->
-                        <div class="mb-6 text-center">
-                            <div class="relative w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
-                                <div v-if="roomPhotoPreviews.length === 0" class="text-center cursor-pointer" @click="triggerRoomPhotoInput">
-                                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2 cursor-pointer" @click="triggerRoomPhotoInput">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                    </div>
-                                    <div class="text-black data-gedung-text font-bold">Tambah Foto Ruang</div>
-                                </div>
-                                
-                                <!-- Photo previews -->
-                                <div v-else class="flex overflow-x-auto p-2 w-full h-full">
-                                    <div v-for="(preview, index) in roomPhotoPreviews" :key="index" class="relative flex-shrink-0 w-32 h-32 mr-2">
-                                        <img :src="preview" class="w-32 h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition opacity" @click="openAddRoomSlideshow(index)" />
-                                        <button @click.stop="removeRoomPhoto(index)" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    
-                                    <!-- Add more photos button -->
-                                    <div class="flex-shrink-0 w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer" @click.stop="triggerRoomPhotoInput">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                
-                                <input 
-                                    type="file" 
-                                    ref="roomPhotoInput" 
-                                    multiple 
-                                    accept="image/*" 
-                                    class="hidden" 
-                                    @change="handleRoomPhotoChange"
-                                />
-                            </div>
-                        </div>
-                        
-                        <!-- Room Details -->
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Nama Ruang</label>
-                                <input 
-                                    v-model="newRoom.name" 
-                                    type="text" 
-                                    class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Jenis Ruang</label>
-                                <div class="flex gap-4">
-                                    <label class="flex items-center">
-                                        <input type="radio" v-model="newRoom.type" value="vip" class="mr-2 text-black" required />
-                                        <span class="flex items-center text-black">
-                                        <img src="@/assets/vipclass.png" alt="VIP" class="h-5 mr-1" />
-                                        </span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="radio" v-model="newRoom.type" value="standard" class="mr-2" required />
-                                        <span class="flex items-center text-black">
-                                        <img src="@/assets/standardclass.png" alt="VIP" class="h-5 mr-1" />
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Total Slot</label>
-                                <input 
-                                    v-model="newRoom.total_slot" 
-                                    type="number" 
-                                    class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Luas Ruangan (m²)</label>
-                                <input 
-                                    v-model="newRoom.area_m2" 
-                                    type="number" 
-                                    class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Fasilitas Ruang</label>
-                                <div class="flex">
-                                    <input 
-                                        v-model="roomFacilityInput" 
-                                        type="text" 
-                                        class="flex-grow px-3 py-2 border text-black rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Tambah Fasilitas Ruang..."
-                                    />
-                                    <button 
-                                        type="button" 
-                                        @click="addRoomFacility"
-                                        class="bg-blue-500 data-gedung-text font-bold text-white px-4 py-2 rounded-r-lg hover:bg-blue-600"
-                                    >
-                                        + Tambah
-                                    </button>
-                                </div>
-                                <div class="flex flex-wrap gap-2 mt-2 mb-2">
+              <div v-if="showAddGuesthouseModal" class="detail-modal fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+                  <div class="detail-modal-cardbox w-4/5 max-w-4xl rounded-2xl shadow-lg p-6 relative overflow-y-auto max-h-[90vh]">
+                      <!-- Close button -->
+                      <button @click="closeAddGuesthouseModal" class="absolute top-4 right-4 text-gray-700 hover:text-gray-900">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                      </button>
+                      
+                      <!-- Modal title -->
+                    <h2 class="text-2xl font-bold data-gedung-text mb-6 text-center">Tambah Gedung Mess</h2>
+                      
+                      <!-- Form steps indicator -->
+                      <div class="flex justify-center mb-6">
+                          <div class="w-1/2 flex items-center">
+                              <div :class="[
+                                  'w-8 h-8 rounded-full flex items-center justify-center font-bold mr-2',
+                                  formStep === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
+                              ]">1</div>
+                              <div class="flex-grow h-1" :class="formStep === 1 ? 'bg-blue-500' : 'bg-gray-300'"></div>
+                              <div :class="[
+                                  'w-8 h-8 rounded-full flex items-center justify-center font-bold ml-2',
+                                  formStep === 2 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
+                              ]">2</div>
+                          </div>
+                      </div>
+                      
+                      <!-- Step 1: Guesthouse Form -->
+                      <form v-if="formStep === 1" @submit.prevent="submitGuesthouseForm" class="space-y-4">
+                          <!-- Photo upload section -->
+                          <div class="mb-6 text-center">
+                              <div class="relative w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center mb-2 cursor-pointer" @click="triggerPhotoInput">
+                                  <div v-if="guesthousePhotoPreviews.length === 0" class="text-center">
+                                      <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                          </svg>
+                                      </div>
+                                      <div class="text-black font-bold data-gedung-text">Tambah Foto</div>
+                                  </div>
+                                  
+                                  <!-- Photo previews -->
+                                  <div v-else class="flex overflow-x-auto p-2 w-full h-full">
+                                      <div v-for="(preview, index) in guesthousePhotoPreviews" :key="index" class="relative flex-shrink-0 w-32 h-32 mr-2">
+                                          <img :src="preview" class="w-32 h-32 object-cover rounded-lg" />
+                                          <button @click.stop="removeGuesthousePhoto(index)" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                              </svg>
+                                          </button>
+                                      </div>
+                                      
+                                      <!-- Add more photos button -->
+                                      <div class="flex-shrink-0 w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer" @click.stop="triggerPhotoInput">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                          </svg>
+                                      </div>
+                                  </div>
+                                  
+                                  <input 
+                                      type="file" 
+                                      ref="photoInput" 
+                                      multiple 
+                                      accept="image/*" 
+                                      class="hidden" 
+                                      @change="handleGuesthousePhotoChange"
+                                  />
+                              </div>
+                          </div>
+                          
+                          <!-- Guesthouse Details -->
+                          <div class="space-y-4">
+                              <div>
+                                  <label class="block text-black data-gedung-text font-bold mb-1">Nama Gedung</label>
+                                  <input 
+                                      v-model="newGuesthouse.name" 
+                                      type="text" 
+                                      class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      required
+                                  />
+                              </div>
+                              
+                              <div>
+                                  <label class="block text-black data-gedung-text font-bold mb-1">Tentang Gedung</label>
+                                  <textarea 
+                                      v-model="newGuesthouse.description" 
+                                      rows="4" 
+                                      class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      required
+                                  ></textarea>
+                              </div>
+                              
+                              <div>
+                                  <label class="block text-black data-gedung-text font-bold mb-1">Luas Bangunan (m²)</label>
+                                  <input 
+                                      v-model="newGuesthouse.area_m2" 
+                                      type="number" 
+                                      class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      required
+                                  />
+                              </div>
+                              
+                              <div>
+                                  <label class="block text-black data-gedung-text font-bold mb-1">Contact Person</label>
+                                  <input 
+                                      v-model="newGuesthouse.contact_person" 
+                                      type="text" 
+                                      class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      required
+                                  />
+                              </div>
+                              
+                              <div>
+                                  <label class="block text-black data-gedung-text font-bold mb-1">Fasilitas Utama</label>
+                                  <div class="flex">
+                                      <input 
+                                          v-model="facilityInput" 
+                                          type="text" 
+                                          class="flex-grow px-3 py-2 border rounded-l-lg focus:outline-none focus:ring-2 text-black focus:ring-blue-500"
+                                          placeholder="Tambah Fasilitas Utama..."
+                                      />
+                                      <button 
+                                          type="button" 
+                                          @click="addFacility"
+                                          class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 font-semibold data-gedung-text"
+                                      >
+                                          + Tambah Fasilitas
+                                      </button>
+                                  </div>
+                                  <div class="mt-2 flex flex-wrap gap-2">
+                                      <button 
+                                          v-for="(quickFacility, index) in quickFacilities" 
+                                          :key="'quick-' + index" 
+                                          type="button" 
+                                          @click="addQuickFacility(quickFacility)"
+                                          class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded text-sm"
+                                      >
+                                          {{ quickFacility }}
+                                      </button>
+                                  </div>
+                                  <div class="flex flex-wrap gap-2 mb-2">
                                     <span 
-                                        v-for="(facility, index) in newRoom.facilitiesList" 
+                                        v-for="(facility, index) in newGuesthouse.facilitiesList" 
                                         :key="index" 
                                         class="bg-gray-300 text-black px-3 py-1 rounded-full text-sm flex items-center"
                                     >
                                         {{ facility }}
-                                        <button @click="removeRoomFacility(index)" class="ml-2 text-black hover:text-blue-800">
+                                        <button @click="removeFacility(index)" class="ml-2 text-black hover:text-black">
                                             ×
                                         </button>
                                     </span>
-                                </div>
-                            </div>
-                            
-                            <!-- Kategori Penyewa & Harga Sewa -->
-                            <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Kategori Penyewa & Harga Sewa</label>
-                                <div class="space-y-3">
-                                    <div v-for="(pricing, index) in newRoom.pricing" :key="index" class="flex gap-2">
-                                        <div class="flex-grow">
-                                            <input 
-                                                v-model="pricing.retribution_type" 
-                                                type="text" 
-                                                class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                placeholder="Kategori Penyewa"
-                                                required
-                                            />
-                                        </div>
-                                        <div class="w-1/3">
-                                            <div class="relative">
-                                                <span class="absolute text-black font-bold data-gedung-text left-3 top-2">Rp</span>
-                                                <input 
-                                                    v-model="pricing.price_per_day" 
-                                                    type="number" 
-                                                    class="w-full px-3 py-2 pl-8 ml-1 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    placeholder="Harga/hari"
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-                                        <button 
-                                            type="button" 
-                                            @click="removePricing(index)" 
-                                            class="w-10 h-10 bg-red-100 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-200"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                <button 
-                                    type="button" 
-                                    @click="addPricing" 
-                                    class="mt-3 data-gedung-text font-bold w-full py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 flex items-center justify-center"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                    </svg>
-                                    Tambah Kategori Harga Sewa
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Form navigation buttons -->
-                        <div class="flex justify-between pt-4">
-                            <button 
-                                type="button" 
-                                @click="goBackToStep1" 
-                                class="px-6 py-2 data-gedung-text font-bold bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-                            >
-                                Kembali
-                            </button>
-                            <button 
-                                type="submit" 
-                                class="px-6 py-2 data-gedung-text font-bold bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center"
-                                :disabled="isSubmittingRoom"
-                            >
-                                <svg v-if="isSubmittingRoom" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                {{ isSubmittingRoom ? 'Menyimpan...' : 'Simpan' }}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                                  </div>
+                              </div>
+                              
+                              <!-- Koordinat Maps -->
+                              <div>
+                                  <label class="block text-black data-gedung-text font-bold mb-1">Lokasi</label>
+                                  <div class="mb-2">
+                                      <div class="flex">
+                                          <input
+                                              v-model="searchQuery"
+                                              type="text"
+                                              placeholder="Ketikkan lokasi atau pilih dari peta"
+                                              class="w-full px-3 py-2 border text-black border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                              @keyup.enter="searchLocation"
+                                          />
+                                          <button 
+                                              type="button" 
+                                              @click="searchLocation" 
+                                              class="px-4 py-2 bg-blue-500 data-gedung-text font-bold text-white rounded-r-lg hover:bg-blue-600"
+                                          >
+                                              Cari
+                                          </button>
+                                      </div>
+                                      <p v-if="searchError" class="text-red-500 text-sm mt-1">{{ searchError }}</p>
+                                  </div>
+                                  <div class="border border-gray-300 rounded-lg overflow-hidden h-48">
+                                      <div id="map" class="w-full h-full"></div>
+                                  </div>
+                                  <div class="flex space-x-4 mt-2 text-sm text-gray-500">
+                                      <p hidden>Latitude: {{ newGuesthouse.latitude }}</p>
+                                      <p hidden>Longitude: {{ newGuesthouse.longitude }}</p>
+                                  </div>
+                              </div>
+
+                              <div>
+                                  <label class="block text-black font-medium mb-1">Alamat</label>
+                                  <input 
+                                      v-model="newGuesthouse.address" 
+                                      type="text" 
+                                      class="w-full px-3 py-2 border rounded-lg data-gedung-text text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      required
+                                  />
+                              </div>
+                          </div>
+                          
+                          <!-- Form navigation buttons -->
+                          <div class="flex justify-between pt-4">
+                              <button 
+                                  type="button" 
+                                  @click="closeAddGuesthouseModal" 
+                                  class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                              >
+                                  Batal
+                              </button>
+                              <button 
+                                  type="submit" 
+                                  class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center"
+                                  :disabled="isSubmittingGuesthouse"
+                              >
+                                  <svg v-if="isSubmittingGuesthouse" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                  </svg>
+                                  {{ isSubmittingGuesthouse ? 'Menyimpan...' : 'Selanjutnya' }}
+                              </button>
+                          </div>
+                      </form>
+                      
+                      <!-- Step 2: Room Form -->
+                      <form v-if="formStep === 2" @submit.prevent="submitRoomForm" class="space-y-4">
+                          <!-- Photo upload section -->
+                          <div class="mb-6 text-center">
+                              <div class="relative w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center mb-2 cursor-pointer" @click="triggerRoomPhotoInput">
+                                  <div v-if="roomPhotoPreviews.length === 0" class="text-center">
+                                      <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                          </svg>
+                                      </div>
+                                      <div class="text-black font-bold">Tambah Foto Ruang</div>
+                                  </div>
+                                  
+                                  <!-- Photo previews -->
+                                  <div v-else class="flex overflow-x-auto p-2 w-full h-full">
+                                      <div v-for="(preview, index) in roomPhotoPreviews" :key="index" class="relative flex-shrink-0 w-32 h-32 mr-2">
+                                          <img :src="preview" class="w-32 h-32 object-cover rounded-lg" />
+                                          <button @click.stop="removeRoomPhoto(index)" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                              </svg>
+                                          </button>
+                                      </div>
+                                      
+                                      <!-- Add more photos button -->
+                                      <div class="flex-shrink-0 w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer" @click.stop="triggerRoomPhotoInput">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                          </svg>
+                                      </div>
+                                  </div>
+                                  
+                                  <input 
+                                      type="file" 
+                                      ref="roomPhotoInput" 
+                                      multiple 
+                                      accept="image/*" 
+                                      class="hidden" 
+                                      @change="handleRoomPhotoChange"
+                                  />
+                              </div>
+                          </div>
+                          
+                          <!-- Room Details -->
+                          <div class="space-y-4">
+                              <div>
+                                  <label class="block text-black font-medium mb-1">Nama Ruang</label>
+                                  <input 
+                                      v-model="newRoom.name" 
+                                      type="text" 
+                                      class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      required
+                                  />
+                              </div>
+                              
+                              <div>
+                                  <label class="block text-black font-medium mb-1">Jenis Ruang</label>
+                                  <div class="flex gap-4">
+                                      <label class="flex items-center">
+                                          <input type="radio" v-model="newRoom.type" value="vip" class="mr-2 text-black" required />
+                                          <span class="flex items-center text-black">
+                                            <img src="@/assets/vipclass.png" alt="VIP" class="h-5 mr-1" />
+                                          </span>
+                                      </label>
+                                      <label class="flex items-center">
+                                          <input type="radio" v-model="newRoom.type" value="standard" class="mr-2" required />
+                                          <span class="flex items-center text-black">
+                                            <img src="@/assets/standardclass.png" alt="VIP" class="h-5 mr-1" />
+                                          </span>
+                                      </label>
+                                  </div>
+                              </div>
+                              
+                              <div>
+                                  <label class="block text-black font-medium mb-1">Total Slot</label>
+                                  <input 
+                                      v-model="newRoom.total_slot" 
+                                      type="number" 
+                                      class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      required
+                                  />
+                              </div>
+                              
+                              <div>
+                                  <label class="block text-black font-medium mb-1">Luas Ruangan (m²)</label>
+                                  <input 
+                                      v-model="newRoom.area_m2" 
+                                      type="number" 
+                                      class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      required
+                                  />
+                              </div>
+                              
+                              <div>
+                                  <label class="block text-black font-medium mb-1">Fasilitas Ruang</label>
+                                  <div class="flex flex-wrap gap-2 mb-2">
+                                      <span 
+                                          v-for="(facility, index) in newRoom.facilitiesList" 
+                                          :key="index" 
+                                          class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center"
+                                      >
+                                          {{ facility }}
+                                          <button @click="removeRoomFacility(index)" class="ml-2 text-blue-600 hover:text-blue-800">
+                                              ×
+                                          </button>
+                                      </span>
+                                  </div>
+                                  <div class="flex">
+                                      <input 
+                                          v-model="roomFacilityInput" 
+                                          type="text" 
+                                          class="flex-grow px-3 py-2 border text-black rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                          placeholder="Tambah Fasilitas Ruang..."
+                                      />
+                                      <button 
+                                          type="button" 
+                                          @click="addRoomFacility"
+                                          class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600"
+                                      >
+                                          + Tambah
+                                      </button>
+                                  </div>
+                                  <!-- <div class="mt-2 flex flex-wrap gap-2">
+                                      <button 
+                                          v-for="(quickFacility, index) in quickRoomFacilities" 
+                                          :key="'quick-room-' + index" 
+                                          type="button" 
+                                          @click="addQuickRoomFacility(quickFacility)"
+                                          class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded text-sm"
+                                      >
+                                          {{ quickFacility }}
+                                      </button>
+                                  </div> -->
+                              </div>
+                              
+                              <!-- Kategori Penyewa & Harga Sewa -->
+                              <div>
+                                  <label class="block text-black font-medium mb-1">Kategori Penyewa & Harga Sewa</label>
+                                  <div class="space-y-3">
+                                      <div v-for="(pricing, index) in newRoom.pricing" :key="index" class="flex gap-2">
+                                          <div class="flex-grow">
+                                              <input 
+                                                  v-model="pricing.retribution_type" 
+                                                  type="text" 
+                                                  class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                  placeholder="Kategori Penyewa"
+                                                  required
+                                              />
+                                          </div>
+                                          <div class="w-1/3">
+                                              <div class="relative">
+                                                  <span class="absolute text-black left-3 top-2">Rp</span>
+                                                  <input 
+                                                      v-model="pricing.price_per_day" 
+                                                      type="number" 
+                                                      class="w-full px-3 py-2 pl-8 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                      placeholder="Harga/hari"
+                                                      required
+                                                  />
+                                              </div>
+                                          </div>
+                                          <button 
+                                              type="button" 
+                                              @click="removePricing(index)" 
+                                              class="w-10 h-10 bg-red-100 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-200"
+                                          >
+                                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                              </svg>
+                                          </button>
+                                      </div>
+                                  </div>
+                                  <button 
+                                      type="button" 
+                                      @click="addPricing" 
+                                      class="mt-3 w-full py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 flex items-center justify-center"
+                                  >
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                      </svg>
+                                      Tambah Kategori Harga Sewa
+                                  </button>
+                              </div>
+                          </div>
+                          
+                          <!-- Form navigation buttons -->
+                          <div class="flex justify-between pt-4">
+                              <button 
+                                  type="button" 
+                                  @click="goBackToStep1" 
+                                  class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                              >
+                                  Kembali
+                              </button>
+                              <button 
+                                  type="submit" 
+                                  class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center"
+                                  :disabled="isSubmittingRoom"
+                              >
+                                  <svg v-if="isSubmittingRoom" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                  </svg>
+                                  {{ isSubmittingRoom ? 'Menyimpan...' : 'Simpan' }}
+                              </button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
         </transition>
 
         <!-- Edit Guesthouse Modal -->
@@ -733,18 +628,18 @@
                     </button>
                     
                     <!-- Modal title -->
-                    <h2 class="text-2xl text-black font-bold mb-6 data-gedung-text text-center">Edit Gedung Mess</h2>
+                    <h2 class="text-2xl font-bold mb-6 data-gedung-text">Edit Gedung Mess</h2>
                     
                     <!-- Form steps indicator -->
                     <div class="flex justify-center mb-6">
                         <div class="w-1/2 flex items-center">
                             <div :class="[
-                                'w-8 h-8 rounded-full flex items-center justify-center data-gedung-text font-bold mr-2',
+                                'w-8 h-8 rounded-full flex items-center justify-center font-bold mr-2',
                                 editFormStep === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
                             ]">1</div>
                             <div class="flex-grow h-1" :class="editFormStep === 1 ? 'bg-blue-500' : 'bg-gray-300'"></div>
                             <div :class="[
-                                'w-8 h-8 rounded-full flex items-center justify-center data-gedung-text font-bold ml-2',
+                                'w-8 h-8 rounded-full flex items-center justify-center font-bold ml-2',
                                 editFormStep === 2 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
                             ]">2</div>
                         </div>
@@ -754,24 +649,20 @@
                     <form v-if="editFormStep === 1" @submit.prevent="proceedToEditStep2" class="space-y-4">
                         <!-- Photo upload section -->
                         <div class="mb-6 text-center">
-                            <div class="relative w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center mb-2 cursor-pointer">
+                            <div class="relative w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center mb-2 cursor-pointer" @click="triggerEditPhotoInput">
                                 <div v-if="editGuesthousePhotoPreviews.length === 0" class="text-center">
                                     <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                         </svg>
                                     </div>
-                                    <div class="text-black font-bold cursor-pointer" @click="triggerEditPhotoInput">Tambah Foto</div>
+                                    <div class="text-black font-bold">Tambah Foto</div>
                                 </div>
                                 
                                 <!-- Photo previews -->
                                 <div v-else class="flex overflow-x-auto p-2 w-full h-full">
                                     <div v-for="(preview, index) in editGuesthousePhotoPreviews" :key="index" class="relative flex-shrink-0 w-32 h-32 mr-2">
-                                        <img 
-                                            :src="preview" 
-                                            class="w-32 h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity" 
-                                            @click="openEditGuesthouseSlideshow(index)"
-                                        />
+                                        <img :src="preview" class="w-32 h-32 object-cover rounded-lg" />
                                         <button @click.stop="removeEditGuesthousePhoto(index)" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -780,7 +671,7 @@
                                     </div>
                                     
                                     <!-- Add more photos button -->
-                                    <div class="flex-shrink-0 w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer" @click="triggerEditPhotoInput">
+                                    <div class="flex-shrink-0 w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer" @click.stop="triggerEditPhotoInput">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                         </svg>
@@ -801,7 +692,7 @@
                         <!-- Guesthouse Details -->
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Nama Gedung</label>
+                                <label class="block text-black font-medium mb-1">Nama Gedung</label>
                                 <input 
                                     v-model="editGuesthouse.name" 
                                     type="text" 
@@ -811,7 +702,7 @@
                             </div>
                             
                             <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Tentang Gedung</label>
+                                <label class="block text-black font-medium mb-1">Tentang Gedung</label>
                                 <textarea 
                                     v-model="editGuesthouse.description" 
                                     rows="4" 
@@ -821,7 +712,7 @@
                             </div>
                             
                             <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Luas Bangunan (m²)</label>
+                                <label class="block text-black font-medium mb-1">Luas Bangunan (m²)</label>
                                 <input 
                                     v-model="editGuesthouse.area_m2" 
                                     type="string" 
@@ -831,7 +722,7 @@
                             </div>
                             
                             <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Contact Person</label>
+                                <label class="block text-black font-medium mb-1">Contact Person</label>
                                 <input 
                                     v-model="editGuesthouse.contact_person" 
                                     type="text" 
@@ -841,7 +732,19 @@
                             </div>
                             
                             <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Fasilitas Utama</label>
+                                <label class="block text-black font-medium mb-1">Fasilitas Utama</label>
+                                <div class="flex flex-wrap gap-2 mb-2">
+                                    <span 
+                                        v-for="(facility, index) in editGuesthouse.facilitiesList" 
+                                        :key="index" 
+                                        class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center"
+                                    >
+                                        {{ facility }}
+                                        <button @click="removeEditFacility(index)" class="ml-2 text-blue-600 hover:text-blue-800">
+                                            ×
+                                        </button>
+                                    </span>
+                                </div>
                                 <div class="flex">
                                     <input 
                                         v-model="editFacilityInput" 
@@ -852,7 +755,7 @@
                                     <button 
                                         type="button" 
                                         @click="addEditFacility"
-                                        class="bg-blue-500 text-white data-gedung-text font-bold px-4 py-2 rounded-r-lg hover:bg-blue-600"
+                                        class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600"
                                     >
                                         + Tambah Fasilitas
                                     </button>
@@ -868,23 +771,11 @@
                                         {{ quickFacility }}
                                     </button>
                                 </div>
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    <span 
-                                        v-for="(facility, index) in editGuesthouse.facilitiesList" 
-                                        :key="index" 
-                                        class="bg-gray-300 text-black px-3 py-1 rounded-full text-sm flex items-center"
-                                    >
-                                        {{ facility }}
-                                        <button @click="removeEditFacility(index)" class="ml-2 text-black hover:text-blue-800">
-                                            ×
-                                        </button>
-                                    </span>
-                                </div>
                             </div>
                             
                             <!-- Koordinat Maps -->
                             <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Lokasi</label>
+                                <label class="block text-black font-medium mb-1">Lokasi</label>
                                 <div class="mb-2">
                                     <div class="flex">
                                         <input
@@ -897,7 +788,7 @@
                                         <button 
                                             type="button" 
                                             @click="searchEditLocation" 
-                                            class="px-4 py-2 bg-blue-500 text-white data-gedung-text font-bold rounded-r-lg hover:bg-blue-600"
+                                            class="px-4 py-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600"
                                         >
                                             Cari
                                         </button>
@@ -914,7 +805,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Alamat</label>
+                                <label class="block text-black font-medium mb-1">Alamat</label>
                                 <input 
                                     v-model="editGuesthouse.address" 
                                     type="text" 
@@ -940,6 +831,18 @@
                                 >
                                     Selanjutnya
                                 </button>
+                                <button 
+                                    type="button" 
+                                    @click="submitEditGuesthouseForm" 
+                                    class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex font-semibold data-gedung-text items-center"
+                                    :disabled="isSubmittingEditGuesthouse"
+                                >
+                                    <svg v-if="isSubmittingEditGuesthouse" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    {{ isSubmittingEditGuesthouse ? 'Menyimpan...' : 'Simpan Perubahan' }}
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -947,10 +850,10 @@
                     <!-- Step 2: Room Management -->
                     <div v-if="editFormStep === 2" class="space-y-6">
                         <div class="flex justify-between items-center">
-                            <h3 class="text-xl data-gedung-text text-black font-bold">Kelola Ruang Mess</h3>
+                            <h3 class="text-xl text-gray-600 font-bold">Kelola Ruang Mess</h3>
                             <button 
                                 @click="addRoomToGuesthouse" 
-                                class="bg-blue-500 data-gedung-text text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center space-x-1"
+                                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center space-x-1"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -969,7 +872,7 @@
                                 <div class="flex justify-between items-start">
                                     <div class="flex-1">
                                         <div class="flex items-center mb-2">
-                                            <h4 class="text-lg data-gedung-text font-bold text-black">{{ room.name }}</h4>
+                                            <h4 class="text-lg font-bold text-gray-600">{{ room.name }}</h4>
                                             <div 
                                                 v-if="room.type.toLowerCase() === 'vip'" 
                                                 class="ml-2 bg-yellow-400 px-2 py-0.5 rounded-md text-sm font-bold text-white"
@@ -983,20 +886,20 @@
                                                 Standard
                                             </div>
                                         </div>
-                                        <p class="text-sm text-black">Total slot: {{ room.total_slot }}</p>
-                                        <p class="text-sm text-black">Luas: {{ room.area_m2 }} m²</p>
+                                        <p class="text-sm text-gray-600">Total slot: {{ room.total_slot }}</p>
+                                        <p class="text-sm text-gray-600">Luas: {{ room.area_m2 }} m²</p>
                                     </div>
                                     
                                     <div class="flex space-x-2">
                                         <button 
                                             @click="selectRoomForEdit(room)" 
-                                            class="bg-blue-500 data-gedung-text font-bold text-white px-3 py-1 rounded hover:bg-blue-600"
+                                            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                                         >
                                             Edit
                                         </button>
                                         <button 
                                             @click="deleteRoom(room.id)" 
-                                            class="bg-red-500 data-gedung-text font-bold text-white px-3 py-1 rounded hover:bg-red-600"
+                                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                                             :disabled="isDeletingRoom"
                                         >
                                             Hapus
@@ -1015,608 +918,235 @@
                             >
                                 Kembali
                             </button>
-                            <!-- <button 
+                            <button 
                                 type="button" 
                                 @click="closeEditGuesthouseModal" 
                                 class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold data-gedung-text"
                             >
                                 Selesai
-                            </button> -->
-                            <button 
-                                type="button" 
-                                @click="submitEditGuesthouseForm" 
-                                class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex font-semibold data-gedung-text items-center"
-                                :disabled="isSubmittingEditGuesthouse"
-                            >
-                                <svg v-if="isSubmittingEditGuesthouse" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                {{ isSubmittingEditGuesthouse ? 'Menyimpan...' : 'Simpan Perubahan' }}
                             </button>
                         </div>
                     </div>
                     
-                    <!-- Edit Room Form (Slide-in panel) dengan Flexbox yang Diperbaiki -->
+                    <!-- Edit Room Form (Slide-in panel) -->
                     <div 
                         v-if="selectedEditRoom" 
-                        class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-60 overflow-y-auto p-4"
+                        class ="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-60 overflow-y-auto p-4"
                     >
-                        <div class="edit-room-form bg-white w-full sm:w-3/4 max-w-2xl rounded-lg shadow-lg relative max-h-[90vh] flex flex-col">
-                        <!-- Header - Full width sticky dengan border -->
-                        <div class="flex justify-between items-center p-6 pb-4 sticky top-0 bg-white border-b border-gray-200 rounded-t-lg z-10 w-full">
-                            <h3 class="text-xl data-gedung-text text-black font-bold">
-                            {{ selectedEditRoom.isNew ? 'Tambah Ruang Baru' : 'Edit Ruang' }}
-                            </h3>
-                            <button @click="closeEditRoomForm" class="text-gray-700 hover:text-gray-900">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                            </button>
-                        </div>
-                        
-                        <!-- Content Area - Scrollable -->
-                        <div class="flex-1 overflow-y-auto p-6 pt-4">
+                    <div class="edit-room-form bg-white w-full sm:w-3/4 max-w-2xl rounded-lg shadow-lg p-6 my-4 mx-auto relative max-h-[90vh] overflow-y-auto">
+                          <div class="flex justify-between items-center mb-4 sticky top-0 bg-white pt-2 z-10">
+                              <h3 class="text-xl text-black font-bold">{{ selectedEditRoom.isNew ? 'Tambah Ruang Baru' : 'Edit Ruang' }}</h3>
+                              <button @click="closeEditRoomForm" class="text-gray-700 hover:text-gray-900">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                  </svg>
+                              </button>
+                          </div>
+                            
                             <!-- Room Edit Form -->
                             <form @submit.prevent="selectedEditRoom.isNew ? submitNewRoomForm() : submitEditRoomForm()" class="space-y-4">
-                            <!-- Photo upload section -->
-                            <div class="mb-6 text-center">
-                                <div class="relative w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center mb-2 cursor-pointer" @click="triggerEditRoomPhotoInput">
-                                <div v-if="editRoomPhotoPreviews.length === 0" class="text-center">
-                                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                    </svg>
-                                    </div>
-                                    <div class="text-black font-bold">Tambah Foto Ruang</div>
-                                </div>
-                                
-                                <!-- Photo previews dengan slideshow click handler -->
-                                <div v-else class="flex overflow-x-auto p-2 w-full h-full">
-                                    <div v-for="(preview, index) in editRoomPhotoPreviews" :key="index" class="relative flex-shrink-0 w-32 h-32 mr-2">
-                                    <img 
-                                        :src="preview" 
-                                        class="w-32 h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity" 
-                                        @click.stop="openEditRoomSlideshow(index)"
-                                    />
-                                    <button @click.stop="removeEditRoomPhoto(index)" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                    </div>
-                                    
-                                    <!-- Add more photos button -->
-                                    <div class="flex-shrink-0 w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer" @click.stop="triggerEditRoomPhotoInput">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                    </svg>
-                                    </div>
-                                </div>
-                                
-                                <input 
-                                    type="file" 
-                                    ref="editRoomPhotoInput" 
-                                    multiple 
-                                    accept="image/*" 
-                                    class="hidden" 
-                                    @change="handleEditRoomPhotoChange"
-                                />
-                                </div>
-                            </div>
-                            
-                            <!-- Room Details -->
-                            <div class="space-y-4">
-                                <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Nama Ruang</label>
-                                <input 
-                                    id="editRoomName"
-                                    v-model="editRoom.name" 
-                                    type="text" 
-                                    class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                />
-                                </div>
-                                
-                                <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Jenis Ruang</label>
-                                <div class="flex gap-4">
-                                    <label class="flex items-center">
-                                    <input type="radio" v-model="editRoom.type" value="vip" class="mr-2 text-black" required />
-                                    <span class="flex items-center text-black">
-                                        <img src="@/assets/vipclass.png" alt="VIP" class="h-5 mr-1" />
-                                    </span>
-                                    </label>
-                                    <label class="flex items-center">
-                                    <input type="radio" v-model="editRoom.type" value="standard" class="mr-2" required />
-                                    <span class="flex items-center text-black">
-                                        <img src="@/assets/standardclass.png" alt="Standard" class="h-5 mr-1" />
-                                    </span>
-                                    </label>
-                                </div>
-                                </div>
-                                
-                                <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Total Slot</label>
-                                <input 
-                                    v-model="editRoom.total_slot" 
-                                    type="number" 
-                                    class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                />
-                                </div>
-                                
-                                <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Luas Ruangan (m²)</label>
-                                <input 
-                                    v-model="editRoom.area_m2" 
-                                    type="number" 
-                                    class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    required
-                                />
-                                </div>
-                                
-                                <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Fasilitas Ruang</label>
-                                <div class="flex">
-                                    <input 
-                                    v-model="editRoomFacilityInput" 
-                                    type="text" 
-                                    class="flex-grow px-3 py-2 border text-black rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Tambah Fasilitas Ruang..."
-                                    @keyup.enter="addEditRoomFacility"
-                                    />
-                                    <button 
-                                    type="button" 
-                                    @click="addEditRoomFacility"
-                                    class="bg-blue-500 data-gedung-text font-bold text-white px-4 py-2 rounded-r-lg hover:bg-blue-600"
-                                    >
-                                    + Tambah
-                                    </button>
-                                </div>
-                                <div class="flex flex-wrap gap-2 mt-2 mb-2">
-                                    <span 
-                                    v-for="(facility, index) in editRoom.facilitiesList" 
-                                    :key="index" 
-                                    class="bg-gray-200 text-black px-3 py-1 rounded-full text-sm flex items-center"
-                                    >
-                                    {{ facility }}
-                                    <button @click="removeEditRoomFacility(index)" class="ml-2 text-black">
-                                        ×
-                                    </button>
-                                    </span>
-                                </div>
-                                </div>
-                                
-                                <!-- Kategori Penyewa & Harga Sewa -->
-                                <div>
-                                <label class="block text-black data-gedung-text font-bold mb-1">Kategori Penyewa & Harga Sewa</label>
-                                <div class="space-y-3">
-                                    <div v-for="(pricing, index) in editRoom.pricing" :key="index" class="flex gap-2">
-                                    <div class="flex-grow">
+                                <!-- Photo upload section -->
+                                <div class="mb-6 text-center">
+                                    <div class="relative w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center mb-2 cursor-pointer" @click="triggerEditRoomPhotoInput">
+                                        <div v-if="editRoomPhotoPreviews.length === 0" class="text-center">
+                                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                                </svg>
+                                            </div>
+                                            <div class="text-black font-bold">Tambah Foto Ruang</div>
+                                        </div>
+                                        
+                                        <!-- Photo previews -->
+                                        <div v-else class="flex overflow-x-auto p-2 w-full h-full">
+                                            <div v-for="(preview, index) in editRoomPhotoPreviews" :key="index" class="relative flex-shrink-0 w-32 h-32 mr-2">
+                                                <img :src="preview" class="w-32 h-32 object-cover rounded-lg" />
+                                                <button @click.stop="removeEditRoomPhoto(index)" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            
+                                            <!-- Add more photos button -->
+                                            <div class="flex-shrink-0 w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer" @click.stop="triggerEditRoomPhotoInput">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        
                                         <input 
-                                        v-model="pricing.retribution_type" 
-                                        type="text" 
-                                        class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Kategori Penyewa"
-                                        required
+                                            type="file" 
+                                            ref="editRoomPhotoInput" 
+                                            multiple 
+                                            accept="image/*" 
+                                            class="hidden" 
+                                            @change="handleEditRoomPhotoChange"
                                         />
                                     </div>
-                                    <div class="w-1/3">
-                                        <div class="relative">
-                                        <span class="absolute text-black left-3 top-2">Rp</span>
+                                </div>
+                                
+                                <!-- Room Details -->
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-black font-medium mb-1">Nama Ruang</label>
                                         <input 
-                                            v-model="pricing.price_per_day" 
-                                            type="number" 
-                                            class="w-full px-3 py-2 pl-8 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            placeholder="Harga/hari"
+                                            id="editRoomName"
+                                            v-model="editRoom.name" 
+                                            type="text" 
+                                            class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             required
                                         />
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-black font-medium mb-1">Jenis Ruang</label>
+                                        <div class="flex gap-4">
+                                            <label class="flex items-center">
+                                                <input type="radio" v-model="editRoom.type" value="vip" class="mr-2 text-black" required />
+                                                <span class="flex items-center text-black">
+                                                  <img src="@/assets/vipclass.png" alt="VIP" class="h-5 mr-1" />
+                                                </span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="radio" v-model="editRoom.type" value="standard" class="mr-2" required />
+                                                <span class="flex items-center text-black">
+                                                  <img src="@/assets/standardclass.png" alt="Standard" class="h-5 mr-1" />
+                                                </span>
+                                            </label>
                                         </div>
                                     </div>
-                                    <button 
-                                        type="button" 
-                                        @click="removeEditPricing(index)" 
-                                        class="w-10 h-10 bg-red-100 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-200"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
+                                    
+                                    <div>
+                                        <label class="block text-black font-medium mb-1">Total Slot</label>
+                                        <input 
+                                            v-model="editRoom.total_slot" 
+                                            type="number" 
+                                            class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            required
+                                        />
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-black font-medium mb-1">Luas Ruangan (m²)</label>
+                                        <input 
+                                            v-model="editRoom.area_m2" 
+                                            type="number" 
+                                            class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            required
+                                        />
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-black font-medium mb-1">Fasilitas Ruang</label>
+                                        <div class="flex flex-wrap gap-2 mb-2">
+                                            <span 
+                                                v-for="(facility, index) in editRoom.facilitiesList" 
+                                                :key="index" 
+                                                class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center"
+                                            >
+                                                {{ facility }}
+                                                <button @click="removeEditRoomFacility(index)" class="ml-2 text-blue-600 hover:text-blue-800">
+                                                    ×
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <div class="flex">
+                                            <input 
+                                                v-model="editRoomFacilityInput" 
+                                                type="text" 
+                                                class="flex-grow px-3 py-2 border text-black rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                placeholder="Tambah Fasilitas Ruang..."
+                                                @keyup.enter="addEditRoomFacility"
+                                            />
+                                            <button 
+                                                type="button" 
+                                                @click="addEditRoomFacility"
+                                                class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600"
+                                            >
+                                                + Tambah
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Kategori Penyewa & Harga Sewa -->
+                                    <div>
+                                        <label class="block text-black font-medium mb-1">Kategori Penyewa & Harga Sewa</label>
+                                        <div class="space-y-3">
+                                            <div v-for="(pricing, index) in editRoom.pricing" :key="index" class="flex gap-2">
+                                                <div class="flex-grow">
+                                                    <input 
+                                                        v-model="pricing.retribution_type" 
+                                                        type="text" 
+                                                        class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        placeholder="Kategori Penyewa"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div class="w-1/3">
+                                                    <div class="relative">
+                                                        <span class="absolute text-black left-3 top-2">Rp</span>
+                                                        <input 
+                                                            v-model="pricing.price_per_day" 
+                                                            type="number" 
+                                                            class="w-full px-3 py-2 pl-8 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            placeholder="Harga/hari"
+                                                            required
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <button 
+                                                    type="button" 
+                                                    @click="removeEditPricing(index)" 
+                                                    class="w-10 h-10 bg-red-100 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-200"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <button 
+                                            type="button" 
+                                            @click="addEditPricing" 
+                                            class="mt-3 w-full py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 flex items-center justify-center"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Tambah Kategori Harga Sewa
+                                        </button>
                                     </div>
                                 </div>
-                                <button 
-                                    type="button" 
-                                    @click="addEditPricing" 
-                                    class="mt-3 w-full py-2 bg-blue-100 font-bold data-gedung-text text-blue-700 rounded-lg hover:bg-blue-200 flex items-center justify-center"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                    </svg>
-                                    Tambah Kategori Harga Sewa
-                                </button>
-                                </div>
-                            </div>
+                                
+                                <!-- Form buttons -->
+                                <div class="flex justify-end pt-6 space-x-3 sticky bottom-0 bg-white pb-2 z-10">
+                                  <button 
+                                      type="button" 
+                                      @click="closeEditRoomForm" 
+                                      class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                                  >
+                                      Batal
+                                  </button>
+                                  <button 
+                                      type="submit" 
+                                      class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center"
+                                      :disabled="isSubmittingEditRoom"
+                                  >
+                                      <svg v-if="isSubmittingEditRoom" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                      </svg>
+                                      {{ isSubmittingEditRoom ? 'Menyimpan...' : 'Simpan' }}
+                                  </button>
+                              </div>
                             </form>
                         </div>
-                        
-                        <!-- Footer - Full width sticky dengan border -->
-                        <div class="p-6 pt-4 sticky bottom-0 bg-white border-t border-gray-200 rounded-b-lg z-10 w-full">
-                            <div class="flex justify-between w-full">
-                            <button 
-                                type="button" 
-                                @click="closeEditRoomForm" 
-                                class="px-6 py-3 bg-gray-300 text-gray-700 font-bold data-gedung-text rounded-lg hover:bg-gray-400"
-                            >
-                                Batal
-                            </button>
-                            <button 
-                                type="submit" 
-                                @click="selectedEditRoom.isNew ? submitNewRoomForm() : submitEditRoomForm()"
-                                class="px-6 py-3 bg-blue-500 text-white data-gedung-text font-bold rounded-lg hover:bg-blue-600 flex items-center"
-                                :disabled="isSubmittingEditRoom"
-                            >
-                                <svg v-if="isSubmittingEditRoom" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                {{ isSubmittingEditRoom ? 'Menyimpan...' : 'Simpan' }}
-                            </button>
-                            </div>
-                        </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </transition>
-
-        <!-- Edit Guesthouse Form Photo Slideshow Modal -->
-        <transition name="modal">
-            <div v-if="showEditGuesthouseSlideshow" class="photo-slideshow fixed inset-0 flex items-center justify-center z-50">
-                <!-- Overlay hitam sebagai background -->
-                <div class="absolute inset-0 bg-black bg-opacity-75"></div>
-                
-                <!-- Container utama dengan tombol close di luar container foto -->
-                <div class="relative w-full h-full max-w-5xl max-h-screen p-4 flex flex-col">
-                    <!-- Tombol Close -->
-                    <button 
-                        @click="showEditGuesthouseSlideshow = false" 
-                        class="absolute top-4 right-4 z-30 bg-black bg-opacity-50 text-white hover:text-gray-200 p-2 rounded-full"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    
-                    <!-- Container untuk foto -->
-                    <div class="flex-1 flex items-center justify-center mt-8 mb-12 overflow-hidden">
-                        <img 
-                            :src="editGuesthousePhotoPreviews[currentEditGuesthouseSlideIndex]" 
-                            alt="Preview foto gedung mess" 
-                            class="max-w-full max-h-full object-contain"
-                        >
-                    </div>
-                    
-                    <!-- Navigasi dan counter foto -->
-                    <div class="flex justify-between items-center w-full px-4">
-                        <!-- Previous Button -->
-                        <button 
-                            @click="prevEditGuesthouseSlide" 
-                            class="navigation-button bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full p-3 text-xl z-20"
-                            :disabled="currentEditGuesthouseSlideIndex === 0"
-                            :class="{'opacity-50 cursor-not-allowed': currentEditGuesthouseSlideIndex === 0}"
-                        >
-                            ◀
-                        </button>
-                        
-                        <!-- Counter foto -->
-                        <div class="bg-black bg-opacity-50 text-white px-4 py-2 rounded-full z-20">
-                            {{ currentEditGuesthouseSlideIndex + 1 }} / {{ editGuesthousePhotoPreviews.length }}
-                        </div>
-                        
-                        <!-- Next Button -->
-                        <button 
-                            @click="nextEditGuesthouseSlide" 
-                            class="navigation-button bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full p-3 text-xl z-20"
-                            :disabled="currentEditGuesthouseSlideIndex === (editGuesthousePhotoPreviews.length - 1)"
-                            :class="{'opacity-50 cursor-not-allowed': currentEditGuesthouseSlideIndex === (editGuesthousePhotoPreviews.length - 1)}"
-                        >
-                            ▶
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </transition>
-
-        <!-- Edit Room Form Photo Slideshow Modal -->
-        <transition name="modal">
-            <div v-if="showEditRoomSlideshow" class="photo-slideshow fixed inset-0 flex items-center justify-center z-50">
-            <!-- Overlay hitam sebagai background -->
-            <div class="absolute inset-0 bg-black bg-opacity-75"></div>
-            
-            <!-- Container utama dengan tombol close di luar container foto -->
-            <div class="relative w-full h-full max-w-5xl max-h-screen p-4 flex flex-col">
-                <!-- Tombol Close -->
-                <button 
-                @click="showEditRoomSlideshow = false" 
-                class="absolute top-4 right-4 z-30 bg-black bg-opacity-50 text-white hover:text-gray-200 p-2 rounded-full"
-                >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                </button>
-                
-                <!-- Container untuk foto -->
-                <div class="flex-1 flex items-center justify-center mt-8 mb-12 overflow-hidden">
-                <img 
-                    :src="editRoomPhotoPreviews[currentEditRoomSlideIndex]" 
-                    alt="Preview foto ruang mess" 
-                    class="max-w-full max-h-full object-contain"
-                >
-                </div>
-                
-                <!-- Navigasi dan counter foto -->
-                <div class="flex justify-between items-center w-full px-4">
-                <!-- Previous Button -->
-                <button 
-                    @click="prevEditRoomSlide" 
-                    class="navigation-button bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full p-3 text-xl z-20"
-                    :disabled="currentEditRoomSlideIndex === 0"
-                    :class="{'opacity-50 cursor-not-allowed': currentEditRoomSlideIndex === 0}"
-                >
-                    ◀
-                </button>
-                
-                <!-- Counter foto -->
-                <div class="bg-black bg-opacity-50 text-white px-4 py-2 rounded-full z-20">
-                    {{ currentEditRoomSlideIndex + 1 }} / {{ editRoomPhotoPreviews.length }}
-                </div>
-                
-                <!-- Next Button -->
-                <button 
-                    @click="nextEditRoomSlide" 
-                    class="navigation-button bg-white bg-opacity-75 hover:bg-opacity-100 rounded-full p-3 text-xl z-20"
-                    :disabled="currentEditRoomSlideIndex === (editRoomPhotoPreviews.length - 1)"
-                    :class="{'opacity-50 cursor-not-allowed': currentEditRoomSlideIndex === (editRoomPhotoPreviews.length - 1)}"
-                >
-                    ▶
-                </button>
-                </div>
-            </div>
-            </div>
-        </transition>
-
-        <!-- 3. HAPUS EDIT ROOM FORM YANG LAMA DAN GANTI DENGAN INI -->
-        <!-- Edit Room Form (Slide-in panel) dengan Flexbox yang Diperbaiki -->
-        <div 
-            v-if="selectedEditRoom" 
-            class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-60 overflow-y-auto p-4"
-        >
-            <div class="edit-room-form bg-white w-full sm:w-3/4 max-w-2xl rounded-lg shadow-lg relative max-h-[90vh] flex flex-col">
-            <!-- Header - Full width sticky dengan border -->
-            <div class="flex justify-between items-center p-6 pb-4 sticky top-0 bg-white border-b border-gray-200 rounded-t-lg z-10 w-full">
-                <h3 class="text-xl data-gedung-text text-black font-bold">
-                {{ selectedEditRoom.isNew ? 'Tambah Ruang Baru' : 'Edit Ruang' }}
-                </h3>
-                <button @click="closeEditRoomForm" class="text-gray-700 hover:text-gray-900">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                </button>
-            </div>
-            
-            <!-- Content Area - Scrollable -->
-            <div class="flex-1 overflow-y-auto p-6 pt-4">
-                <!-- Room Edit Form -->
-                <form @submit.prevent="selectedEditRoom.isNew ? submitNewRoomForm() : submitEditRoomForm()" class="space-y-4">
-                <!-- Photo upload section -->
-                <div class="mb-6 text-center">
-                    <div class="relative w-full h-40 bg-gray-100 rounded-lg flex items-center justify-center mb-2 cursor-pointer" @click="triggerEditRoomPhotoInput">
-                    <div v-if="editRoomPhotoPreviews.length === 0" class="text-center">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        </div>
-                        <div class="text-black font-bold">Tambah Foto Ruang</div>
-                    </div>
-                    
-                    <!-- Photo previews dengan slideshow click handler -->
-                    <div v-else class="flex overflow-x-auto p-2 w-full h-full">
-                        <div v-for="(preview, index) in editRoomPhotoPreviews" :key="index" class="relative flex-shrink-0 w-32 h-32 mr-2">
-                        <img 
-                            :src="preview" 
-                            class="w-32 h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity" 
-                            @click.stop="openEditRoomSlideshow(index)"
-                        />
-                        <button @click.stop="removeEditRoomPhoto(index)" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                        </div>
-                        
-                        <!-- Add more photos button -->
-                        <div class="flex-shrink-0 w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer" @click.stop="triggerEditRoomPhotoInput">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        </div>
-                    </div>
-                    
-                    <input 
-                        type="file" 
-                        ref="editRoomPhotoInput" 
-                        multiple 
-                        accept="image/*" 
-                        class="hidden" 
-                        @change="handleEditRoomPhotoChange"
-                    />
-                    </div>
-                </div>
-                
-                <!-- Room Details -->
-                <div class="space-y-4">
-                    <div>
-                    <label class="block text-black data-gedung-text font-bold mb-1">Nama Ruang</label>
-                    <input 
-                        id="editRoomName"
-                        v-model="editRoom.name" 
-                        type="text" 
-                        class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
-                    </div>
-                    
-                    <div>
-                    <label class="block text-black data-gedung-text font-bold mb-1">Jenis Ruang</label>
-                    <div class="flex gap-4">
-                        <label class="flex items-center">
-                        <input type="radio" v-model="editRoom.type" value="vip" class="mr-2 text-black" required />
-                        <span class="flex items-center text-black">
-                            <img src="@/assets/vipclass.png" alt="VIP" class="h-5 mr-1" />
-                        </span>
-                        </label>
-                        <label class="flex items-center">
-                        <input type="radio" v-model="editRoom.type" value="standard" class="mr-2" required />
-                        <span class="flex items-center text-black">
-                            <img src="@/assets/standardclass.png" alt="Standard" class="h-5 mr-1" />
-                        </span>
-                        </label>
-                    </div>
-                    </div>
-                    
-                    <div>
-                    <label class="block text-black data-gedung-text font-bold mb-1">Total Slot</label>
-                    <input 
-                        v-model="editRoom.total_slot" 
-                        type="number" 
-                        class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
-                    </div>
-                    
-                    <div>
-                    <label class="block text-black data-gedung-text font-bold mb-1">Luas Ruangan (m²)</label>
-                    <input 
-                        v-model="editRoom.area_m2" 
-                        type="number" 
-                        class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
-                    </div>
-                    
-                    <div>
-                    <label class="block text-black data-gedung-text font-bold mb-1">Fasilitas Ruang</label>
-                    <div class="flex">
-                        <input 
-                        v-model="editRoomFacilityInput" 
-                        type="text" 
-                        class="flex-grow px-3 py-2 border text-black rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Tambah Fasilitas Ruang..."
-                        @keyup.enter="addEditRoomFacility"
-                        />
-                        <button 
-                        type="button" 
-                        @click="addEditRoomFacility"
-                        class="bg-blue-500 data-gedung-text font-bold text-white px-4 py-2 rounded-r-lg hover:bg-blue-600"
-                        >
-                        + Tambah
-                        </button>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mt-2 mb-2">
-                        <span 
-                        v-for="(facility, index) in editRoom.facilitiesList" 
-                        :key="index" 
-                        class="bg-gray-200 text-black px-3 py-1 rounded-full text-sm flex items-center"
-                        >
-                        {{ facility }}
-                        <button @click="removeEditRoomFacility(index)" class="ml-2 text-black">
-                            ×
-                        </button>
-                        </span>
-                    </div>
-                    </div>
-                    
-                    <!-- Kategori Penyewa & Harga Sewa -->
-                    <div>
-                    <label class="block text-black data-gedung-text font-bold mb-1">Kategori Penyewa & Harga Sewa</label>
-                    <div class="space-y-3">
-                        <div v-for="(pricing, index) in editRoom.pricing" :key="index" class="flex gap-2">
-                        <div class="flex-grow">
-                            <input 
-                            v-model="pricing.retribution_type" 
-                            type="text" 
-                            class="w-full px-3 py-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Kategori Penyewa"
-                            required
-                            />
-                        </div>
-                        <div class="w-1/3">
-                            <div class="relative">
-                            <span class="absolute text-black left-3 top-2">Rp</span>
-                            <input 
-                                v-model="pricing.price_per_day" 
-                                type="number" 
-                                class="w-full px-3 py-2 pl-8 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Harga/hari"
-                                required
-                            />
-                            </div>
-                        </div>
-                        <button 
-                            type="button" 
-                            @click="removeEditPricing(index)" 
-                            class="w-10 h-10 bg-red-100 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-200"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </button>
-                        </div>
-                    </div>
-                    <button 
-                        type="button" 
-                        @click="addEditPricing" 
-                        class="mt-3 w-full py-2 bg-blue-100 font-bold data-gedung-text text-blue-700 rounded-lg hover:bg-blue-200 flex items-center justify-center"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Tambah Kategori Harga Sewa
-                    </button>
-                    </div>
-                </div>
-                </form>
-            </div>
-            
-            <!-- Footer - Full width sticky dengan border -->
-            <div class="p-6 pt-4 sticky bottom-0 bg-white border-t border-gray-200 rounded-b-lg z-10 w-full">
-                <div class="flex justify-between w-full">
-                <button 
-                    type="button" 
-                    @click="closeEditRoomForm" 
-                    class="px-6 py-3 bg-gray-300 text-gray-700 font-bold data-gedung-text rounded-lg hover:bg-gray-400"
-                >
-                    Batal
-                </button>
-                <button 
-                    type="submit" 
-                    @click="selectedEditRoom.isNew ? submitNewRoomForm() : submitEditRoomForm()"
-                    class="px-6 py-3 bg-blue-500 text-white data-gedung-text font-bold rounded-lg hover:bg-blue-600 flex items-center"
-                    :disabled="isSubmittingEditRoom"
-                >
-                    <svg v-if="isSubmittingEditRoom" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    {{ isSubmittingEditRoom ? 'Menyimpan...' : 'Simpan' }}
-                </button>
-                </div>
-            </div>
-            </div>
-        </div>
-
 
       <!-- Modal Popup Detail -->
       <transition name="modal">
@@ -2253,14 +1783,6 @@ export default {
           isSubmittingRoom: false, // Loading state ketika 
           showModal: false,
           showAddGuesthouseModal: false, // state awal 
-          showAddGuesthouseSlideshow: false,
-          showAddRoomSlideshow: false,
-          currentAddGuesthouseSlideIndex: 0,
-          currentAddRoomSlideIndex: 0,
-          showEditGuesthouseSlideshow: false,
-          currentEditGuesthouseSlideIndex: 0,
-          showEditRoomSlideshow: false,
-          currentEditRoomSlideIndex: 0,
           formStep: 1, // index state input form tambah gedung mess
           showSlideshow: false,
           showRoomSlideshow: false,
@@ -2400,87 +1922,11 @@ export default {
         this.showAddGuesthouseModal = true;
         this.resetForms();
     },
-
-    // untuk membuka slide show foto form tambah gedung mess
-    openAddGuesthouseSlideshow(startIndex = 0) {
-        this.currentAddGuesthouseSlideIndex = startIndex;
-        this.showAddGuesthouseSlideshow = true;
-    },
-
-    // untuk membuka slide show foto form tambah ruang mess
-    openAddRoomSlideshow(startIndex = 0) {
-        this.currentAddRoomSlideIndex = startIndex;
-        this.showAddRoomSlideshow = true;
-    },
-
-    // untuk membuka slide show foto form edit gedung mess
-    openEditGuesthouseSlideshow(startIndex = 0) {
-        this.currentEditGuesthouseSlideIndex = startIndex;
-        this.showEditGuesthouseSlideshow = true;
-    },
-
-    // navigasi slideshow foto form edit guesthouse
-    nextEditGuesthouseSlide() {
-        if (this.currentEditGuesthouseSlideIndex < this.editGuesthousePhotoPreviews.length - 1) {
-            this.currentEditGuesthouseSlideIndex++;
-        }
-    },
-
-    prevEditGuesthouseSlide() {
-        if (this.currentEditGuesthouseSlideIndex > 0) {
-            this.currentEditGuesthouseSlideIndex--;
-        }
-    },
-
-    // navigasi slideshow foto form tambah guesthouse
-    nextAddGuesthouseSlide() {
-        if (this.currentAddGuesthouseSlideIndex < this.guesthousePhotoPreviews.length - 1) {
-            this.currentAddGuesthouseSlideIndex++;
-        }
-    },
-
-    prevAddGuesthouseSlide() {
-        if (this.currentAddGuesthouseSlideIndex > 0) {
-            this.currentAddGuesthouseSlideIndex--;
-        }
-    },
-
-    // navigasi slideshow foto form tambah room
-    nextAddRoomSlide() {
-        if (this.currentAddRoomSlideIndex < this.roomPhotoPreviews.length - 1) {
-            this.currentAddRoomSlideIndex++;
-        }
-    },
-
-    prevAddRoomSlide() {
-        if (this.currentAddRoomSlideIndex > 0) {
-            this.currentAddRoomSlideIndex--;
-        }
-    },
-    
-    closeAddGuesthouseModal() {
-        this.showAddGuesthouseModal = false;
-        this.resetForms();
-    },
-
-    // untuk membuka slide show foto form edit ruang mess
-    openEditRoomSlideshow(startIndex = 0) {
-        this.currentEditRoomSlideIndex = startIndex;
-        this.showEditRoomSlideshow = true;
-    },
-
-    // navigasi slideshow foto form edit room
-    nextEditRoomSlide() {
-        if (this.currentEditRoomSlideIndex < this.editRoomPhotoPreviews.length - 1) {
-            this.currentEditRoomSlideIndex++;
-        }
-    },
-
-    prevEditRoomSlide() {
-        if (this.currentEditRoomSlideIndex > 0) {
-            this.currentEditRoomSlideIndex--;
-        }
-    },
+      
+      closeAddGuesthouseModal() {
+          this.showAddGuesthouseModal = false;
+          this.resetForms();
+      },
       
       resetForms() {
           // Reset all form data
@@ -4659,7 +4105,7 @@ transform: scale(0.9);
   outline: none;
 }
 
-/* Efek hover untuk tombol Tambah Gedung Mess */
+/* Efek hover untuk tombol Tambah Gedung Nasional */
 .hover-gradient {
   position: relative;
   overflow: hidden;
@@ -4761,73 +4207,5 @@ transform: scale(0.9);
 
 .edit-room-form{
   height: 90%;
-}
-
-.photo-slideshow {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-.navigation-button {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.navigation-button:focus {
-    outline: none;
-}
-
-/* Animasi untuk modal */
-.modal-enter-active, .modal-leave-active {
-    transition: all 0.3s ease;
-}
-
-.modal-enter-from, .modal-leave-to {
-    opacity: 0;
-    transform: scale(0.9);
-}
-
-.edit-room-form {
-  /* Memastikan modal memiliki tinggi yang optimal */
-  min-height: 600px;
-}
-
-/* Untuk photo slideshow yang konsisten */
-.photo-slideshow {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.navigation-button {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.navigation-button:focus {
-  outline: none;
-}
-
-/* Animasi untuk modal */
-.modal-enter-active, .modal-leave-active {
-  transition: all 0.3s ease;
-}
-
-.modal-enter-from, .modal-leave-to {
-  opacity: 0;
-  transform: scale(0.9);
-}
-
-/* Better sticky positioning */
-.sticky {
-  position: -webkit-sticky;
-  position: sticky;
 }
 </style>
