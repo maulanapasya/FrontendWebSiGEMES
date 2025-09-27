@@ -1038,7 +1038,7 @@
                     </div>
                     
                     <!-- Edit Room Form (Slide-in panel) dengan Flexbox yang Diperbaiki -->
-                     <transition name="modal">
+                     <Transition
                         <div 
                             v-if="selectedEditRoom" 
                             class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-60 overflow-y-auto p-4"
@@ -1267,7 +1267,6 @@
                             </div>
                             </div>
                         </div>
-                    </transition>
                 </div>
             </div>
         </transition>
